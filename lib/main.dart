@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = GeneratorPage(pair: pair, appState: appState, icon: icon);
         break;
       case 1:
-        page = Container(color: Colors.red);
+        page = Favoritesview();
         break;
       default:
         throw UnimplementedError('selectedIndex is wrong');
@@ -162,6 +162,21 @@ class BigCard extends StatelessWidget {
           semanticsLabel: '${pair.first} ${pair.second}',
         ),
       ),
+    );
+  }
+}
+
+class Favoritesview extends StatelessWidget {
+  const Favoritesview({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    return ListView.builder(
+      itemCount: appState.favorites.length,
+      itemBuilder: (context, index) {
+        return ListTile(title: Text(appState.favorites[index].toString()));
+      },
     );
   }
 }
