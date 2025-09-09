@@ -56,30 +56,61 @@ class MyHomePage extends StatelessWidget {
 
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
           children: [
-            Text('A random awesome idea:'),
-            BigCard(pair: pair),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  onPressed: appState.toggleFavorites,
-                  icon: Icon(icon),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    print('buton pressed');
-                    appState.getNext();
-                  },
-                  child: Text('next'),
+            NavigationRail(
+              destinations: [
+                NavigationRailDestination(
+                  icon: Icon(Icons.home),
+                  label: Text('HOME'),
                 ),
               ],
+              selectedIndex: 0,
+              onDestinationSelected: (int index) {},
+            ),
+            Expanded(
+              child: GeneratorPage(pair: pair, appState: appState, icon: icon),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class GeneratorPage extends StatelessWidget {
+  const GeneratorPage({
+    super.key,
+    required this.pair,
+    required this.appState,
+    required this.icon,
+  });
+
+  final WordPair pair;
+  final MyAppState appState;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('A random awesome idea:'),
+        BigCard(pair: pair),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(onPressed: appState.toggleFavorites, icon: Icon(icon)),
+            ElevatedButton(
+              onPressed: () {
+                print('buton pressed');
+                appState.getNext();
+              },
+              child: Text('next'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
