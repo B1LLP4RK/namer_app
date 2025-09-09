@@ -70,32 +70,37 @@ class _MyHomePageState extends State<MyHomePage> {
       default:
         throw UnimplementedError('selectedIndex is wrong');
     }
-    return Scaffold(
-      body: Center(
-        child: Row(
-          children: [
-            NavigationRail(
-              destinations: [
-                NavigationRailDestination(
-                  icon: Icon(Icons.home),
-                  label: Text('HOME'),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Scaffold(
+          body: Center(
+            child: Row(
+              children: [
+                NavigationRail(
+                  extended: constraints.maxWidth >= 600,
+                  destinations: [
+                    NavigationRailDestination(
+                      icon: Icon(Icons.home),
+                      label: Text('HOME'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.favorite),
+                      label: Text('FAVORITES'),
+                    ),
+                  ],
+                  selectedIndex: selectedIndex,
+                  onDestinationSelected: (int index) {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                  },
                 ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.favorite),
-                  label: Text('FAVORITES'),
-                ),
+                Expanded(child: page),
               ],
-              selectedIndex: selectedIndex,
-              onDestinationSelected: (int index) {
-                setState(() {
-                  selectedIndex = index;
-                });
-              },
             ),
-            Expanded(child: page),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
