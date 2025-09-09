@@ -32,11 +32,11 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleFavorites() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
+  void toggleFavorites(WordPair wordpair) {
+    if (favorites.contains(wordpair)) {
+      favorites.remove(wordpair);
     } else {
-      favorites.add(current);
+      favorites.add(wordpair);
     }
     notifyListeners();
   }
@@ -126,7 +126,12 @@ class GeneratorPage extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(onPressed: appState.toggleFavorites, icon: Icon(icon)),
+            IconButton(
+              onPressed: () {
+                appState.toggleFavorites(pair);
+              },
+              icon: Icon(icon),
+            ),
             ElevatedButton(
               onPressed: () {
                 print('buton pressed');
@@ -175,7 +180,15 @@ class Favoritesview extends StatelessWidget {
     return ListView.builder(
       itemCount: appState.favorites.length,
       itemBuilder: (context, index) {
-        return ListTile(title: Text(appState.favorites[index].toString()));
+        return ListTile(
+          title: Text(appState.favorites[index].toString()),
+          leading: IconButton(
+            onPressed: () {
+              appState.toggleFavorites(appState.favorites[index]);
+            },
+            icon: Icon(Icons.favorite),
+          ),
+        );
       },
     );
   }
