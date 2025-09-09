@@ -42,7 +42,13 @@ class MyAppState extends ChangeNotifier {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
@@ -53,7 +59,17 @@ class MyHomePage extends StatelessWidget {
     } else {
       icon = Icons.favorite_border;
     }
-
+    Widget page;
+    switch (selectedIndex) {
+      case 0:
+        page = GeneratorPage(pair: pair, appState: appState, icon: icon);
+        break;
+      case 1:
+        page = Container(color: Colors.red);
+        break;
+      default:
+        throw UnimplementedError('selectedIndex is wrong');
+    }
     return Scaffold(
       body: Center(
         child: Row(
@@ -64,13 +80,19 @@ class MyHomePage extends StatelessWidget {
                   icon: Icon(Icons.home),
                   label: Text('HOME'),
                 ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.favorite),
+                  label: Text('FAVORITES'),
+                ),
               ],
-              selectedIndex: 0,
-              onDestinationSelected: (int index) {},
+              selectedIndex: selectedIndex,
+              onDestinationSelected: (int index) {
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
             ),
-            Expanded(
-              child: GeneratorPage(pair: pair, appState: appState, icon: icon),
-            ),
+            Expanded(child: page),
           ],
         ),
       ),
@@ -82,14 +104,13 @@ class GeneratorPage extends StatelessWidget {
   const GeneratorPage({
     super.key,
     required this.pair,
-    required this.appState,
     required this.icon,
+    required this.appState,
   });
 
   final WordPair pair;
-  final MyAppState appState;
   final IconData icon;
-
+  final MyAppState appState;
   @override
   Widget build(BuildContext context) {
     return Column(
